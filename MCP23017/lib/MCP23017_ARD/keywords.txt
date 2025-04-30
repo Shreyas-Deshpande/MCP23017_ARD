@@ -1,0 +1,5 @@
+PORT            KEYWORD1
+GPIO            KEYWORD1
+pinMode         KEYWORD2
+digitalWrite    KEYWORD2
+digitalRead     KEYWORD2
