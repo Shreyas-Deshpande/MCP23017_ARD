@@ -40,6 +40,15 @@
 #define PORT_OUT    0x00
 #define PORT_IN     0xFF
 
+
+/*
+*   Port Name
+*/
+
+#define PORT_A  0
+#define PORT_B  1
+
+
 typedef struct gpio
     {
         uint8_t pin_0 : 1;
@@ -77,6 +86,7 @@ public:
     void pinMode(uint8_t PIN, bool DIR);
     void digitalWrite(uint8_t PIN, bool val);
     bool digitalRead(uint8_t PIN);
+    void set_PORT_DIR(uint8_t PORT, uint8_t DIR);
 }PORT;
 
 #endif

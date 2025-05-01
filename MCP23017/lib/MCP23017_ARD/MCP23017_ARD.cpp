@@ -33,6 +33,13 @@ GPIO::GPIO()
     Wire.endTransmission();
 }
 
+
+/**
+ * @brief Set single pin direction
+ * 
+ * @param PIN : Pin Number
+ * @param DIR : Directyion(Input/Output)
+ */
 void GPIO::pinMode(uint8_t PIN, bool DIR)
 {
     if (DIR == INPUT)
@@ -43,6 +50,13 @@ void GPIO::pinMode(uint8_t PIN, bool DIR)
     }
 }
 
+
+/**
+ * @brief Write binary value on specified pin
+ * 
+ * @param PIN : GPIO pin number
+ * @param val : Binary value to be written on the gpio pin
+ */
 void GPIO::digitalWrite(uint8_t PIN, bool val)
 {
     
@@ -69,6 +83,14 @@ void GPIO::digitalWrite(uint8_t PIN, bool val)
     }
 }
 
+
+/**
+ * @brief Read the binary value from specified gpio pin
+ * 
+ * @param PIN  : GPIO pin number to be read
+ * @return true 
+ * @return false 
+ */
 bool GPIO::digitalRead(uint8_t PIN)
 {
     if (PIN < 8)
@@ -79,4 +101,16 @@ bool GPIO::digitalRead(uint8_t PIN)
     {
         // Port-B
     }
+}
+
+
+/**
+ * @brief Set the direction of the entire port
+ * 
+ * @param PORT : Port of which direction to be changed
+ * @param DIR  : Port Direction (Input/Output) 
+ */
+void GPIO::set_PORT_DIR(uint8_t PORT,uint8_t DIR)
+{
+
 }
