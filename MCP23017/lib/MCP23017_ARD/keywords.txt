@@ -3,3 +3,6 @@ GPIO            KEYWORD1
 pinMode         KEYWORD2
 digitalWrite    KEYWORD2
 digitalRead     KEYWORD2
+portMode        KEYWORD2
+portWrite       KEYWORD2
+portRead        KEYWORD2
