@@ -86,7 +86,9 @@ public:
     void pinMode(uint8_t PIN, bool DIR);
     void digitalWrite(uint8_t PIN, bool val);
     bool digitalRead(uint8_t PIN);
-    void set_PORT_DIR(uint8_t PORT, uint8_t DIR);
+    void portMode(uint8_t PORT, uint8_t DIR);
+    void porWrite(uint8_t PORT, uint8_t iVal);
+    uint8_t portRead(uint8_t PORT);
 }PORT;
 
 #endif
