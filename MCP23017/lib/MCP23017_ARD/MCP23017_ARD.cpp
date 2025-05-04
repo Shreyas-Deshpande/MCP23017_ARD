@@ -52,7 +52,6 @@ void GPIO::pinMode(uint8_t pin, bool dir)
 
         (dir == INPUT) ? iVal |= (INPUT << pin) : iVal &= (!(1 << pin));
 
-        
         Wire.beginTransmission(DEV_ADDR);
         Wire.write(IODIRA_ADDR);
         Wire.write(iVal);
@@ -108,15 +107,31 @@ void GPIO::digitalWrite(uint8_t PIN, bool val)
  * @return true : If spcefied port pin is HIGH
  * @return false: If specified port pin is LOW
  */
-bool GPIO::digitalRead(uint8_t PIN)
+bool GPIO::digitalRead(uint8_t pin)
 {
-    if (PIN < 8)
+    uint8_t iVal = 0;
+
+    if (pin < 8)
     {
         // Port-A
+        Wire.beginTransmission(DEV_ADDR);
+        Wire.write(PORTA_ADDR);
+        Wire.endTransmission();
+        Wire.requestFrom(DEV_ADDR, 1);
+        iVal = Wire.read();
+
+        return ((iVal & (1 << pin)));
     }
     else
     {
         // Port-B
+        Wire.beginTransmission(DEV_ADDR);
+        Wire.write(PORTB_ADDR);
+        Wire.endTransmission();
+        Wire.requestFrom(DEV_ADDR, 1);
+        iVal = Wire.read();
+
+        return ((iVal & (1 << pin)));
     }
 }
 
