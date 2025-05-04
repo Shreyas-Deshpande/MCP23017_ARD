@@ -39,16 +39,34 @@ GPIO::GPIO()
  * @param PIN : Pin Number
  * @param DIR : Directyion(Input/Output)
  */
-void GPIO::pinMode(uint8_t PIN, bool DIR)
+void GPIO::pinMode(uint8_t pin, bool dir)
 {
-    if (DIR == INPUT)
+    uint8_t iVal = 0;
+    if (pin < 8)
     {
+        Wire.beginTransmission(DEV_ADDR);
+        Wire.write(IODIRA_ADDR);
+        Wire.endTransmission();
+        Wire.requestFrom(DEV_ADDR, 1);
+        iVal = Wire.read();
+
+        (dir == INPUT) ? iVal |= (INPUT << pin) : iVal &= (!(1 << pin));
+
         
-
-
+        Wire.beginTransmission(DEV_ADDR);
+        Wire.write(IODIRA_ADDR);
+        Wire.write(iVal);
+        Wire.endTransmission();
     }
-    else // DIR = OUTPUT
+    else
     {
+        Wire.beginTransmission(DEV_ADDR);
+        Wire.write(IODIRB_ADDR);
+        Wire.endTransmission();
+        Wire.requestFrom(DEV_ADDR, 1);
+        iVal = Wire.read();
+
+        (dir == INPUT) ? iVal |= (INPUT << (pin - 8)) : iVal &= (!(1 << (pin - 8)));
     }
 }
 
@@ -116,20 +134,19 @@ void GPIO::portMode(uint8_t Port, uint8_t dir)
 
         if (dir == INPUT)
         {
-            
+
             //  Set Port-A as Input
             Wire.beginTransmission(DEV_ADDR);
             Wire.write(IODIRA_ADDR); // IODIRA register
             Wire.write(PORT_IN);     // set entire PORT A to input
             Wire.endTransmission();
-
         }
         else
         {
             // Port-A Dirtection set to OUTPUT
             Wire.beginTransmission(DEV_ADDR);
             Wire.write(IODIRA_ADDR); // IODIRA register
-            Wire.write(PORT_OUT);     // set entire PORT A to output
+            Wire.write(PORT_OUT);    // set entire PORT A to output
             Wire.endTransmission();
         }
     }
@@ -138,7 +155,7 @@ void GPIO::portMode(uint8_t Port, uint8_t dir)
         // Direction Control of Port B
         if (dir == INPUT)
         {
-            
+
             // Set Port-B as Input
             Wire.beginTransmission(DEV_ADDR);
             Wire.write(IODIRB_ADDR);
@@ -150,25 +167,24 @@ void GPIO::portMode(uint8_t Port, uint8_t dir)
             // Port-B Direction set to OUTPUT
             Wire.beginTransmission(DEV_ADDR);
             Wire.write(IODIRB_ADDR); // IODIRB register
-            Wire.write(PORT_OUT);     // set entire PORT B to output
+            Wire.write(PORT_OUT);    // set entire PORT B to output
             Wire.endTransmission();
         }
     }
 }
 
-
 /**
  * @brief Write 8-bit value on to spwecified port
- * 
+ *
  * @param Port : Port Number
  * @param iVAL : Value to be written on the port
  */
 
 void GPIO::porWrite(uint8_t Port, uint8_t iVAL)
 {
-    if(Port == PORT_A)
+    if (Port == PORT_A)
     {
-        //Write value to Port-A
+        // Write value to Port-A
         Wire.beginTransmission(DEV_ADDR);
         Wire.write(PORTA_ADDR);
         Wire.write(iVAL);
@@ -176,43 +192,41 @@ void GPIO::porWrite(uint8_t Port, uint8_t iVAL)
     }
     else
     {
-        //Write value to Port-B
+        // Write value to Port-B
         Wire.beginTransmission(DEV_ADDR);
         Wire.write(PORTB_ADDR);
         Wire.write(iVAL);
         Wire.endTransmission();
     }
-
 }
-
 
 /**
  * @brief Read the 8-bit value from the port
- * 
+ *
  * @param Port : Port to be read from
  * @return uint8_t : Value read from port
  */
 
 uint8_t GPIO::portRead(uint8_t Port)
 {
-    uint8_t iVal=0; //local variable to store the port read value
+    uint8_t iVal = 0; // local variable to store the port read value
 
-    if(Port == PORT_A)
+    if (Port == PORT_A)
     {
-        //Read Port-A
+        // Read Port-A
         Wire.beginTransmission(DEV_ADDR);
         Wire.write(PORTA_ADDR);
         Wire.endTransmission();
-        Wire.requestFrom(DEV_ADDR,1);
+        Wire.requestFrom(DEV_ADDR, 1);
         iVal = Wire.read();
     }
     else
     {
-        //Read Port-B
+        // Read Port-B
         Wire.beginTransmission(DEV_ADDR);
         Wire.write(PORTB_ADDR);
         Wire.endTransmission();
-        Wire.requestFrom(DEV_ADDR,1);
+        Wire.requestFrom(DEV_ADDR, 1);
         iVal = Wire.read();
     }
     return iVal;
